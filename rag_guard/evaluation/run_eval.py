@@ -3,7 +3,7 @@ from pathlib import Path
 from rag_guard.pipeline.pipeline import guard
 
 
-DATASET = Path("evaluation_dataset.csv")
+DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "evaluation_dataset.csv"
 
 
 # -------------------------------------------------
@@ -105,3 +105,4 @@ def evaluate():
 # -------------------------------------------------
 if __name__ == "__main__":
     evaluate()
+
