@@ -42,14 +42,3 @@ def plot_metrics(metrics):
     plt.show()
 
 
-def plot_policy_coverage(policy_counts):
-
-    names = list(policy_counts.keys())
-    values = list(policy_counts.values())
-
-    plt.figure()
-    plt.barh(names, values)
-    plt.title("Policy Attribution Coverage")
-    plt.show()
-
-
