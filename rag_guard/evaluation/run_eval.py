@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 from rag_guard.pipeline.pipeline import guard
-from visualization import *
+from rag_guard.evaluation.visualization import *
 from collections import Counter
 
 DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "evaluation_dataset.csv"
