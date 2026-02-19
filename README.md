@@ -116,7 +116,7 @@ LLM-Prompt-Injection-Guard/
 │   └── observability/       # Guard event logging
 │
 ├── evaluation/              # Dataset & evaluation scripts
-├── dashboard.py             # Streamlit guard dashboard
+├── app.py             # Streamlit guard dashboard
 └── README.md
 ```
 
@@ -170,7 +170,7 @@ python -m rag_guard.ingestion.build_index
 ### Run dashboard
 
 ```
-streamlit run dashboard.py
+streamlit run app.py
 ```
 
 ### Evaluate guard
