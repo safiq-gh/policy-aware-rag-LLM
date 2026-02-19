@@ -5,7 +5,7 @@ import json
 from langchain_ollama import OllamaEmbeddings
 
 # ---- POLICY PATH ----
-POLICY_DIR = Path(r"C:\Users\User\Desktop\LLM-SLM\LLM-Prompt-Injection-Guard\policies")
+POLICY_DIR = Path(r"C:\Users\fpes6\Desktop\policy-aware-rag\policies")
 
 
 def split_sections(text: str):
@@ -70,7 +70,7 @@ def build_vector_store(chunks):
     sys.stdout.flush()
     
     embeddings = OllamaEmbeddings(
-        model="nomic-embed-text",
+        model="mxbai-embed-large:latest",
         base_url="http://127.0.0.1:11434"
     )
     print("Embeddings initialized", flush=True)

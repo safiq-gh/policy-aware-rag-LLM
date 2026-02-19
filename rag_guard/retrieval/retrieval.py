@@ -20,7 +20,7 @@ class JSONVectorStore:
         
         # Embed query
         embeddings = OllamaEmbeddings(
-            model="nomic-embed-text",
+            model="mxbai-embed-large:latest",
             base_url="http://127.0.0.1:11434"
         )
         query_embedding = np.array(embeddings.embed_query(query))

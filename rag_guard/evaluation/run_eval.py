@@ -1,7 +1,8 @@
 import csv
 from pathlib import Path
 from rag_guard.pipeline.pipeline import guard
-
+from visualization import *
+from collections import Counter
 
 DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "evaluation_dataset.csv"
 
@@ -98,6 +99,25 @@ def evaluate():
     print("F1:", round(f1, 4))
     print("False Positive Rate:", round(fpr, 4))
     print("Policy Attribution:", round(policy_acc, 4))
+    # ---- visualization ----
+    metrics = {
+        "accuracy": accuracy,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1,
+        "fpr": fpr
+    }
+    
+    policy_counts = Counter()
+    # inside loop where policy matched
+    if row["expected_policy"] in retrieved:
+        policy_match += 1
+        policy_counts[row["expected_policy"]] += 1
+
+    plot_confusion_matrix(TP, FP, TN, FN)
+    plot_metrics(metrics)
+    plot_policy_coverage(policy_counts)
+
 
 
 # -------------------------------------------------
@@ -105,4 +125,3 @@ def evaluate():
 # -------------------------------------------------
 if __name__ == "__main__":
     evaluate()
-
