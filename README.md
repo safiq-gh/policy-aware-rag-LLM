@@ -1,8 +1,12 @@
 # 🛡️ LLM Prompt Injection Guard (RAG-Based)
 
-A **Retrieval-Augmented Prompt Injection Guard** that detects and prevents malicious prompts targeting Large Language Models by grounding decisions in explicit security policies.
+> A **Retrieval-Augmented Prompt Injection Guard** that detects and prevents malicious prompts targeting Large Language Models by grounding decisions in explicit security policies.
+> This system combines semantic retrieval, policy-aware reasoning, and enforcement control to create an interpretable and extensible guardrail architecture for LLM applications.
 
-This system combines semantic retrieval, policy-aware reasoning, and enforcement control to create an interpretable and extensible guardrail architecture for LLM applications.
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=flat-square&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?style=flat-square&logo=streamlit)
+![Ollama](https://img.shields.io/badge/Ollama-local%20inference-black?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ---
 
