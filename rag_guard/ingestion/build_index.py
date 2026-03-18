@@ -4,8 +4,8 @@ import sys
 import json
 from langchain_ollama import OllamaEmbeddings
 
-# ---- POLICY PATH ----
-POLICY_DIR = Path(r"C:\Users\fpes6\Desktop\policy-aware-rag\policies")
+# ---- POLICY PATH (dynamic - works on any machine/drive) ----
+POLICY_DIR = Path(__file__).resolve().parents[2] / "policies"
 
 
 def split_sections(text: str):
@@ -14,10 +14,7 @@ def split_sections(text: str):
 
     sections = []
     for i in range(1, len(parts), 2):
-        sections.append({
-            "section": parts[i].strip(),
-            "text": parts[i + 1].strip()
-        })
+        sections.append({"section": parts[i].strip(), "text": parts[i + 1].strip()})
     return sections
 
 
@@ -31,18 +28,20 @@ def load_policy_chunks():
             text = f.read()
 
         for idx, sec in enumerate(split_sections(text)):
-            chunks.append({
-                "id": f"{policy_id}_{idx}",
-                "policy_id": policy_id,
-                "section": sec["section"],
-                "text": sec["text"]
-            })
+            chunks.append(
+                {
+                    "id": f"{policy_id}_{idx}",
+                    "policy_id": policy_id,
+                    "section": sec["section"],
+                    "text": sec["text"],
+                }
+            )
 
     return chunks
 
 
 def split_long_text(text, max_chars=700):
-    return [text[i:i+max_chars] for i in range(0, len(text), max_chars)]
+    return [text[i : i + max_chars] for i in range(0, len(text), max_chars)]
 
 
 def build_vector_store(chunks):
@@ -55,12 +54,14 @@ def build_vector_store(chunks):
 
     for c in chunks:
         for i, piece in enumerate(split_long_text(c["text"])):
-            docs.append({
-                "id": f"{c['id']}_{i}",
-                "text": piece,
-                "policy_id": c["policy_id"],
-                "section": c["section"]
-            })
+            docs.append(
+                {
+                    "id": f"{c['id']}_{i}",
+                    "text": piece,
+                    "policy_id": c["policy_id"],
+                    "section": c["section"],
+                }
+            )
 
     print(f"Created {len(docs)} embedding documents", flush=True)
     sys.stdout.flush()
@@ -68,10 +69,9 @@ def build_vector_store(chunks):
     # ---- Embedding model ----
     print("Initializing embeddings...", flush=True)
     sys.stdout.flush()
-    
+
     embeddings = OllamaEmbeddings(
-        model="mxbai-embed-large:latest",
-        base_url="http://127.0.0.1:11434"
+        model="mxbai-embed-large:latest", base_url="http://127.0.0.1:11434"
     )
     print("Embeddings initialized", flush=True)
     sys.stdout.flush()
@@ -84,10 +84,12 @@ def build_vector_store(chunks):
     sys.stdout.flush()
 
     for i in range(0, len(docs), BATCH):
-        batch = docs[i:i+BATCH]
+        batch = docs[i : i + BATCH]
         texts = [d["text"] for d in batch]
 
-        print(f"Embedding batch {i//BATCH + 1} / {(len(docs)-1)//BATCH + 1}", flush=True)
+        print(
+            f"Embedding batch {i//BATCH + 1} / {(len(docs)-1)//BATCH + 1}", flush=True
+        )
         sys.stdout.flush()
 
         batch_embeds = embeddings.embed_documents(texts)
@@ -97,20 +99,22 @@ def build_vector_store(chunks):
     sys.stdout.flush()
 
     # ---- Store in JSON ----
-    DB_PATH = Path(__file__).resolve().parents[1] / "vector_store.json"
+    DB_PATH = Path(__file__).resolve().parents[2] / "vector_store.json"
     print(f"Saving to: {DB_PATH}", flush=True)
     sys.stdout.flush()
 
     # Combine docs with embeddings
     vector_store = []
     for idx, doc in enumerate(docs):
-        vector_store.append({
-            "id": doc["id"],
-            "text": doc["text"],
-            "embedding": all_embeddings[idx],
-            "policy_id": doc["policy_id"],
-            "section": doc["section"]
-        })
+        vector_store.append(
+            {
+                "id": doc["id"],
+                "text": doc["text"],
+                "embedding": all_embeddings[idx],
+                "policy_id": doc["policy_id"],
+                "section": doc["section"],
+            }
+        )
 
     # Write to JSON
     with open(DB_PATH, "w", encoding="utf-8") as f:
